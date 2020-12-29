@@ -36,13 +36,14 @@ class ResPartner(models.Model):
     )
     settlement = fields.Selection(
         selection=[
+            ("fortnightly", "Fortnightly"),
             ("monthly", "Monthly"),
             ("quaterly", "Quarterly"),
             ("semi", "Semi-annual"),
             ("annual", "Annual"),
         ],
         string="Settlement period",
-        default="monthly",
+        default="fortnightly",
     )
     settlement_ids = fields.One2many(
         comodel_name="sale.commission.settlement",

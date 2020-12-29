@@ -17,7 +17,12 @@ class SaleCommissionMakeSettle(models.TransientModel):
     )
 
     def _get_period_start(self, agent, date_to):
-        if agent.settlement == "monthly":
+        if agent.settlement == "fortnightly":
+            if date_to.day > 15:
+                return date(month=date_to.month, year=date_to.year, day=16)
+            else:
+                return date(month=date_to.month, year=date_to.year, day=1)
+        elif agent.settlement == "monthly":
             return date(month=date_to.month, year=date_to.year, day=1)
         elif agent.settlement == "quaterly":
             # Get first month of the date quarter
@@ -32,7 +37,9 @@ class SaleCommissionMakeSettle(models.TransientModel):
             return date(month=1, year=date_to.year, day=1)
 
     def _get_next_period_date(self, agent, current_date):
-        if agent.settlement == "monthly":
+        if agent.settlement == "fortnightly":
+            return current_date + relativedelta(day=15)
+        elif agent.settlement == "monthly":
             return current_date + relativedelta(months=1)
         elif agent.settlement == "quaterly":
             return current_date + relativedelta(months=3)
