@@ -38,7 +38,10 @@ class SaleCommissionMakeSettle(models.TransientModel):
 
     def _get_next_period_date(self, agent, current_date):
         if agent.settlement == "fortnightly":
-            return current_date + relativedelta(day=15)
+            if current_date.day > 15:
+                return current_date + relativedelta(day=31)
+            else:
+                return current_date + relativedelta(day=16)
         elif agent.settlement == "monthly":
             return current_date + relativedelta(months=1)
         elif agent.settlement == "quaterly":
